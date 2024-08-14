@@ -3,11 +3,13 @@
 #include <string>
 #include <mysql.h>
 #include <time.h>
+#include <fstream>
 
 using namespace std;
 
 void TotalFunction::report() {
 	int month, last_month;
+
 	cout << "분석할 달의 숫자를 입력하세요: ";
 
 	while (true) {
@@ -19,7 +21,7 @@ void TotalFunction::report() {
 			cout << "알맞은 숫자를 입력하세요: ";
 		}
 	}
-
+	
 	last_month = (month == 1) ? 12 : month - 1;
 
 	cout << "\n\n***" << month << "월의 종합 보고서***" << endl;
@@ -105,12 +107,40 @@ void TotalFunction::report() {
 		cout << "\n지난달에 비해 지출이 " << expense_diff << "원(+" << ex_per << "%) 증가하였습니다.\n";
 	}
 
-	mysql_free_result(sInResult);
-	mysql_free_result(sExResult);
-	mysql_free_result(lastInResult);
-	mysql_free_result(lastExResult);
-
 	cout << "***보고서 마침***\n\n\n";
+
+	cout << "보고서를 저장하시겠습니까?" << endl;
+	cout << "1. 저장하기\t\t2. 나가기" << endl;
+	int answer;
+	cin >> answer;
+	cout << endl;
+
+	if (answer == 1) {
+		ofstream fout("C:\\Users\\CHOI\\Desktop\\C++\\작업\\Smile_FinancialLedger\\MonthlyReport.csv");
+		if (!fout) {
+			cout << "파일을 열 수 없습니다." << endl;
+		}
+
+		fout << "수입(단위:원),전월수입(단위:원),지출(단위:원),전월지출(단위:원),수입증감액(단위:원),수입증감율(단위:%),지출증감액(단위:원),지출증감율(단위:%)" << endl;
+
+		fout << totalIncome << ","
+			<< last_totalIncome << ","
+			<< totalExpense << ","
+			<< last_totalExpense << ","
+			<< income_diff << ","
+			<< in_per << ","
+			<< expense_diff << ","
+			<< ex_per << endl;
+
+		fout.close();
+
+		cout << "저장이 완료되었습니다.";
+
+		mysql_free_result(sInResult);
+		mysql_free_result(sExResult);
+		mysql_free_result(lastInResult);
+		mysql_free_result(lastExResult);
+	}
 }
 
 void TotalFunction::search_name() {

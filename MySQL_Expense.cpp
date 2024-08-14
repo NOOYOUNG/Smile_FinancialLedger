@@ -14,7 +14,7 @@ MySQL_Expense::~MySQL_Expense() {
 void MySQL_Expense::connect() {
 	mysql_init(&expense);
 
-	if (!mysql_real_connect(&expense, "localhost", "root", "root", "ledger", 3306, NULL, 0)) {
+	if (!mysql_real_connect(&expense, "localhost", "", "", "ledger", 3306, NULL, 0)) {
 		cerr << "Failed to connect Mysql" << mysql_error(&expense) << endl;
 	}
 

@@ -13,7 +13,7 @@ MySQL_Income::~MySQL_Income() {
 
 void MySQL_Income::inconnect() {
 	mysql_init(&income);
-	if (!mysql_real_connect(&income, "localhost", "root", "root", "ledger", 3306, NULL, 0)) {
+	if (!mysql_real_connect(&income, "localhost", "", "", "ledger", 3306, NULL, 0)) {
 		cerr << "Failed to connect Mysql" << mysql_error(&income) << endl;
 	}
 
